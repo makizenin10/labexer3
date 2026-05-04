@@ -77,7 +77,7 @@ export default function Dashboard() {
         </div>
         <div className="flex items-center gap-3">
           <span className="text-sm text-gray-400">{user.email}</span>
-          <Link href="/profile" className="text-sm text-black border border-gray-200 rounded-md px-3 py-1 hover:bg-gray-50 transition">
+          <Link href="/profile" className="text-sm text-black border border-gray-200 rounded-md px-3 py-3 hover:bg-gray-50 transition">
             My Profile
           </Link>
           <button onClick={handleLogout} className="text-sm text-gray-400 border border-gray-100 rounded-md px-3 py-1 hover:bg-gray-50 transition">
