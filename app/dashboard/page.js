@@ -12,8 +12,8 @@ const styles = {
   brandText: "text-lg font-semibold tracking-widest text-white uppercase",
   adminBadge: "text-xs bg-black text-white px-2 py-0.5 rounded-full tracking-wide",
   userEmail: "text-sm text-gray-400",
-  profileBtn: "text-sm text-black border border-gray-200 rounded-md px-4 py-1 hover:bg-gray-50 transition whitespace-nowrap min-w-fit",
-  logoutBtn: "text-sm text-gray-400 border border-gray-100 rounded-md px-3 py-1 hover:bg-gray-50 transition",
+  profileBtn: "text-sm text-white border border-gray-200 rounded-md px-4 py-1 hover:bg-gray-50 transition whitespace-nowrap min-w-fit",
+  logoutBtn: "text-sm text-white border border-gray-100 rounded-md px-3 py-1 hover:bg-gray-50 transition",
 
   // Action bar
   sectionTitle: "text-lg font-medium text-black",
