@@ -1,0 +1,24 @@
+export default function Home() {
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      {/* Changed bg-white-800 to bg-white below */}
+      <div className="text-center bg-white p-8 rounded-lg shadow-md max-w-md">
+        <h1 className="text-3xl font-bold text-black mb-4">Article Space</h1>
+        <p className="text-black mb-6">A simple integrated web app using Supabase and Vercel.</p>
+
+        <div className="flex flex-col gap-4">
+          <a href="/login">
+            <button className="w-full bg-purple-500 hover:bg-purple-600 text-white font-medium py-2 px-4 rounded transition duration-200">
+              User Login/Signup
+            </button>
+          </a>
+          <a href="/admin-login">
+            <button className="w-full bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded transition duration-200">
+              Admin Login
+            </button>
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
