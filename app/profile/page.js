@@ -94,7 +94,7 @@ export default function ProfilePage() {
               <input
                 value={profile.email}
                 readOnly
-                onClick={() => alert('To change your email, please contact the admin.\n\n📧 Email: manaayjerica@gmail.com\n📞 Contact: 09686336110')}
+                onClick={() => alert('To change your email, please contact the admin.\n\n📧 Email: viccabrillos@antiquespride.edu.ph\n📞 Contact: 09123456789')}
                 className="px-3 py-2 rounded-md border border-gray-200 bg-gray-50 text-sm text-gray-400 outline-none cursor-not-allowed"
               />
             </div>
