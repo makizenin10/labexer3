@@ -5,6 +5,37 @@ import { useRouter } from "next/navigation";
 import ArticleCard from "../../components/ArticleCard";
 import Link from "next/link";
 
+// ================================
+// 🎨 STYLE CONFIG — edit here
+// ================================
+const styles = {
+  // Navbar
+  navbarBorder: "border-b border-gray-100",
+  brandDot: "w-2 h-2 bg-white rounded-full",
+  brandText: "text-lg font-semibold tracking-widest text-white uppercase",
+  adminBadge: "text-xs bg-black text-white px-2 py-0.5 rounded-full tracking-wide",
+  userEmail: "text-sm text-gray-400",
+  profileBtn: "text-sm text-black border border-gray-200 rounded-md px-3 py-1 hover:bg-gray-50 transition",
+  logoutBtn: "text-sm text-gray-400 border border-gray-100 rounded-md px-3 py-1 hover:bg-gray-50 transition",
+
+  // Action bar
+  sectionTitle: "text-lg font-medium text-black",
+  publishBtn: "flex items-center gap-1.5 bg-black text-white text-sm font-medium px-4 py-2 rounded-md hover:bg-gray-900 transition",
+
+  // Publish form
+  formWrapper: "bg-gray-50 border border-gray-100 rounded-xl p-5 mb-6 flex flex-col gap-3",
+  formInput: "px-3 py-2 rounded-md border border-gray-200 bg-white text-sm text-black outline-none focus:border-gray-400 transition",
+  formTextarea: "px-3 py-2 rounded-md border border-gray-200 bg-white text-sm text-black outline-none focus:border-gray-400 transition resize-y font-sans",
+  fileDropzone: "border border-dashed border-gray-200 rounded-md p-4 text-center bg-white",
+  fileLabel: "text-sm text-gray-400 cursor-pointer",
+  fileRemoveBtn: "ml-3 text-xs text-red-400 hover:text-red-600",
+  submitBtn: "bg-black text-white text-sm font-medium px-5 py-2 rounded-md hover:bg-gray-900 transition disabled:opacity-50",
+
+  // Feed
+  emptyState: "text-sm text-gray-300 text-center py-10",
+};
+// ================================
+
 export default function Dashboard() {
   const [user, setUser] = useState(null);
   const [userRole, setUserRole] = useState(null);
@@ -67,61 +98,57 @@ export default function Dashboard() {
     <div className="max-w-2xl mx-auto px-5 py-10 font-sans">
 
       {/* NAVBAR */}
-      <div className="flex justify-between items-center pb-5 border-b border-gray-100 mb-8">
+      <div className={`flex justify-between items-center pb-5 ${styles.navbarBorder} mb-8`}>
         <div className="flex items-center gap-2">
-          <div className="w-2 h-2 bg-white rounded-full"></div>
-          <span className="text-lg font-semibold tracking-widest text-white uppercase">Article Dome</span>
+          <div className={styles.brandDot}></div>
+          <span className={styles.brandText}>Article Dome</span>
           {userRole === "admin" && (
-            <span className="text-xs bg-black text-white px-2 py-0.5 rounded-full tracking-wide">Admin</span>
+            <span className={styles.adminBadge}>Admin</span>
           )}
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-sm text-gray-400">{user.email}</span>
-          <Link href="/profile" className="text-sm text-black border border-gray-200 rounded-md px-3 py-3 hover:bg-gray-50 transition">
-            My Profile
-          </Link>
-          <button onClick={handleLogout} className="text-sm text-gray-400 border border-gray-100 rounded-md px-3 py-1 hover:bg-gray-50 transition">
-            Logout
-          </button>
+          <span className={styles.userEmail}>{user.email}</span>
+          <Link href="/profile" className={styles.profileBtn}>My Profile</Link>
+          <button onClick={handleLogout} className={styles.logoutBtn}>Logout</button>
         </div>
       </div>
 
       {/* ACTION BAR */}
       <div className="flex justify-between items-center mb-5">
-        <h2 className="text-lg font-medium text-black">Latest articles</h2>
-        <button onClick={() => setShowForm(!showForm)} className="flex items-center gap-1.5 bg-black text-white text-sm font-medium px-4 py-2 rounded-md hover:bg-gray-900 transition">
+        <h2 className={styles.sectionTitle}>Latest articles</h2>
+        <button onClick={() => setShowForm(!showForm)} className={styles.publishBtn}>
           {showForm ? "✕ Cancel" : <><span className="text-base">+</span> Publish article</>}
         </button>
       </div>
 
       {/* PUBLISH FORM */}
       {showForm && (
-        <div className="bg-gray-50 border border-gray-100 rounded-xl p-5 mb-6 flex flex-col gap-3">
+        <div className={styles.formWrapper}>
           <input
             type="text"
             placeholder="Article title"
             value={newTitle}
             onChange={(e) => setNewTitle(e.target.value)}
-            className="px-3 py-2 rounded-md border border-gray-200 bg-white text-sm text-black outline-none focus:border-gray-400 transition"
+            className={styles.formInput}
           />
           <textarea
             placeholder="Write your article here..."
             value={newContent}
             onChange={(e) => setNewContent(e.target.value)}
             rows={4}
-            className="px-3 py-2 rounded-md border border-gray-200 bg-white text-sm text-black outline-none focus:border-gray-400 transition resize-y font-sans"
+            className={styles.formTextarea}
           />
-          <div className="border border-dashed border-gray-200 rounded-md p-4 text-center bg-white">
+          <div className={styles.fileDropzone}>
             <input type="file" id="file-upload" accept="image/*,.pdf,.doc,.docx" className="hidden" onChange={(e) => setSelectedFile(e.target.files[0])} />
-            <label htmlFor="file-upload" className="text-sm text-gray-400 cursor-pointer">
+            <label htmlFor="file-upload" className={styles.fileLabel}>
               {selectedFile ? selectedFile.name : "Attach a file — image or document"}
             </label>
             {selectedFile && (
-              <button onClick={() => setSelectedFile(null)} className="ml-3 text-xs text-red-400 hover:text-red-600">Remove</button>
+              <button onClick={() => setSelectedFile(null)} className={styles.fileRemoveBtn}>Remove</button>
             )}
           </div>
           <div className="flex justify-end">
-            <button onClick={handlePublish} disabled={publishing || uploading} className="bg-black text-white text-sm font-medium px-5 py-2 rounded-md hover:bg-gray-900 transition disabled:opacity-50">
+            <button onClick={handlePublish} disabled={publishing || uploading} className={styles.submitBtn}>
               {uploading ? "Uploading..." : publishing ? "Publishing..." : "Publish"}
             </button>
           </div>
@@ -141,7 +168,7 @@ export default function Dashboard() {
             />
           ))
         ) : (
-          <p className="text-sm text-gray-300 text-center py-10">No articles yet.</p>
+          <p className={styles.emptyState}>No articles yet.</p>
         )}
       </div>
     </div>
