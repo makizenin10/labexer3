@@ -13,71 +13,71 @@ export default function AdminLogin() {
 
   const handleLogin = async () => {
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) { setMessage(error.message); return; }
 
-    if (error) {
-      setMessage(error.message);
-      return;
-    }
-
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('role')
-      .eq('id', data.user.id)
-      .single();
-
-    if (profile?.role !== 'admin') {
+    const { data: profile } = await supabase.from("profiles").select("role").eq("id", data.user.id).single();
+    if (profile?.role !== "admin") {
       await supabase.auth.signOut();
-      setMessage('Access denied. Admins only.');
+      setMessage("Access denied. Admins only.");
       return;
     }
-
     router.push("/dashboard");
   };
 
-  const inputStyle = { width: '100%', padding: '8px', margin: '8px 0', border: '1px solid #ccc', borderRadius: '4px', boxSizing: 'border-box' };
-
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div style={{
-        background: 'rgba(255, 255, 255, 0.85)',
-        backdropFilter: 'blur(6px)',
-        borderRadius: '12px',
-        padding: '40px',
-        width: '100%',
-        maxWidth: '360px',
-        boxShadow: '0 8px 32px rgba(0,0,0,0.2)',
-        textAlign: 'center',
-        fontFamily: 'Arial, sans-serif'
-      }}>
-        <h1 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '16px' }}>Admin Login</h1>
+    <div className="min-h-screen flex items-center justify-center px-4">
+      <div className="bg-white border border-gray-100 rounded-xl p-10 w-full max-w-sm">
 
-        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} style={inputStyle} />
-
-        {/* Password with show/hide */}
-        <div style={{ position: 'relative', margin: '8px 0' }}>
-          <input
-            type={showPassword ? 'text' : 'password'}
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            style={{ width: '100%', padding: '8px', paddingRight: '40px', border: '1px solid #ccc', borderRadius: '4px', boxSizing: 'border-box' }}
-          />
-          <button
-            onClick={() => setShowPassword(!showPassword)}
-            style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', fontSize: '16px' }}>
-            {showPassword ? '🙈' : '👁️'}
-          </button>
+        <div className="mb-8">
+          <div className="flex items-center gap-2 mb-3">
+            <div className="w-2 h-2 bg-black rounded-full"></div>
+            <span className="text-xs tracking-widest text-gray-400 uppercase">Article Space</span>
+            <span className="text-xs bg-black text-white px-2 py-0.5 rounded-full tracking-wide">Admin</span>
+          </div>
+          <h1 className="text-2xl font-medium text-black mb-1">Admin login</h1>
+          <p className="text-sm text-gray-400">Restricted access. Admins only.</p>
         </div>
 
-        <button onClick={handleLogin}
-          style={{ width: '100%', padding: '8px', marginTop: '8px', border: 'none', background: '#a855f7', color: 'white', borderRadius: '4px', cursor: 'pointer' }}>
-          Login
+        <hr className="border-gray-100 mb-6" />
+
+        <div className="flex flex-col gap-3 mb-4">
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="px-3 py-2 rounded-md border border-gray-200 text-sm text-black outline-none focus:border-gray-400 transition"
+          />
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-3 py-2 pr-14 rounded-md border border-gray-200 text-sm text-black outline-none focus:border-gray-400 transition"
+            />
+            <button
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 hover:text-gray-600 transition"
+            >
+              {showPassword ? "hide" : "show"}
+            </button>
+          </div>
+        </div>
+
+        {message && <p className="text-xs text-red-400 mb-3">{message}</p>}
+
+        <button
+          onClick={handleLogin}
+          className="w-full bg-black text-white rounded-md py-2.5 px-4 text-sm font-medium flex items-center justify-between hover:bg-gray-900 transition"
+        >
+          <span>Login</span>
+          <span>→</span>
         </button>
 
-        <p style={{ marginTop: '10px', fontSize: '14px', color: '#ef4444' }}>{message}</p>
-        <Link href="/" style={{ display: 'block', fontSize: '13px', color: '#6b7280', marginTop: '8px', textDecoration: 'none' }}>
-          ← Back to Home
-        </Link>
+        <p className="text-xs text-center text-gray-300 mt-5">
+          <Link href="/" className="hover:text-gray-500 transition">← Back to home</Link>
+        </p>
       </div>
     </div>
   );

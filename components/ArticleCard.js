@@ -10,7 +10,6 @@ export default function ArticleCard({ article, currentUserId, currentUserRole, o
   const [editTitle, setEditTitle] = useState(article.title);
   const [editContent, setEditContent] = useState(article.content);
   const [saving, setSaving] = useState(false);
-
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
@@ -25,23 +24,17 @@ export default function ArticleCard({ article, currentUserId, currentUserRole, o
   useEffect(() => {
     const checkLike = async () => {
       if (!currentUserId) return;
-      const { data } = await supabase
-        .from('likes')
-        .select('id')
-        .eq('user_id', currentUserId)
-        .eq('article_id', article.id)
-        .single();
+      const { data } = await supabase.from('likes').select('id')
+        .eq('user_id', currentUserId).eq('article_id', article.id).single();
       if (data) setHasLiked(true);
     };
     checkLike();
   }, [currentUserId, article.id]);
 
   const fetchComments = async () => {
-    const { data, error } = await supabase
-      .from('comments')
+    const { data, error } = await supabase.from('comments')
       .select('*, profiles(username, full_name)')
-      .eq('article_id', article.id)
-      .order('created_at', { ascending: true });
+      .eq('article_id', article.id).order('created_at', { ascending: true });
     if (!error) setComments(data);
   };
 
@@ -52,8 +45,7 @@ export default function ArticleCard({ article, currentUserId, currentUserRole, o
 
   const handleAddComment = async () => {
     if (!newComment.trim()) return;
-    const { error } = await supabase
-      .from('comments')
+    const { error } = await supabase.from('comments')
       .insert([{ article_id: article.id, user_id: currentUserId, content: newComment, parent_id: null }]);
     if (!error) { setNewComment(''); await fetchComments(); }
     else alert('Comment failed: ' + error.message);
@@ -61,8 +53,7 @@ export default function ArticleCard({ article, currentUserId, currentUserRole, o
 
   const handleAddReply = async (parentId) => {
     if (!replyText.trim()) return;
-    const { error } = await supabase
-      .from('comments')
+    const { error } = await supabase.from('comments')
       .insert([{ article_id: article.id, user_id: currentUserId, content: replyText, parent_id: parentId }]);
     if (!error) { setReplyText(''); setReplyingTo(null); await fetchComments(); }
     else alert('Reply failed: ' + error.message);
@@ -75,24 +66,19 @@ export default function ArticleCard({ article, currentUserId, currentUserRole, o
   };
 
   const handleLike = async () => {
-    if (!currentUserId) {
-      alert("Please login to like articles.");
-      return;
-    }
+    if (!currentUserId) { alert("Please login to like articles."); return; }
     if (hasLiked) {
-      const { error: unlikeError } = await supabase.from('likes').delete()
+      const { error } = await supabase.from('likes').delete()
         .eq('user_id', currentUserId).eq('article_id', article.id);
-      if (unlikeError) return;
+      if (error) return;
       await supabase.rpc('decrement_counter', { row_id: article.id });
-      setCount(count - 1);
-      setHasLiked(false);
+      setCount(count - 1); setHasLiked(false);
     } else {
-      const { error: likeError } = await supabase.from('likes')
+      const { error } = await supabase.from('likes')
         .insert([{ user_id: currentUserId, article_id: article.id }]);
-      if (likeError) return;
+      if (error) return;
       await supabase.rpc('increment_counter', { row_id: article.id });
-      setCount(count + 1);
-      setHasLiked(true);
+      setCount(count + 1); setHasLiked(true);
     }
   };
 
@@ -120,7 +106,6 @@ export default function ArticleCard({ article, currentUserId, currentUserRole, o
     setSaving(false);
     if (!error) {
       setIsEditing(false);
-      // Logic to update local display text
       article.title = editTitle;
       article.content = editContent;
     } else {
@@ -132,93 +117,200 @@ export default function ArticleCard({ article, currentUserId, currentUserRole, o
   const getReplies = (parentId) => comments.filter(c => c.parent_id === parentId);
 
   return (
-    <div className="card">
+    <div className="bg-white border border-gray-100 rounded-xl p-5 flex flex-col gap-3">
+
       {isEditing ? (
-        <div className="edit-container">
-          <input className="edit-input" value={editTitle} onChange={(e) => setEditTitle(e.target.value)} placeholder="Title" />
-          <textarea className="edit-textarea" value={editContent} onChange={(e) => setEditContent(e.target.value)} rows={4} placeholder="Content..." />
-          <div className="button-group">
-            <button onClick={handleSaveEdit} disabled={saving} className="btn btn-save">
-              {saving ? 'Saving...' : 'Save Changes'}
+        <div className="flex flex-col gap-3">
+          <input
+            value={editTitle}
+            onChange={(e) => setEditTitle(e.target.value)}
+            placeholder="Title"
+            className="px-3 py-2 rounded-md border border-gray-200 bg-white text-sm font-medium text-black outline-none focus:border-gray-400 transition"
+          />
+          <textarea
+            value={editContent}
+            onChange={(e) => setEditContent(e.target.value)}
+            rows={4}
+            placeholder="Content..."
+            className="px-3 py-2 rounded-md border border-gray-200 bg-white text-sm text-black outline-none focus:border-gray-400 transition resize-y font-sans"
+          />
+          <div className="flex gap-2 justify-end">
+            <button
+              onClick={() => setIsEditing(false)}
+              className="text-sm text-gray-400 border border-gray-100 rounded-md px-3 py-1.5 hover:bg-gray-50 transition"
+            >
+              Cancel
             </button>
-            <button onClick={() => setIsEditing(false)} className="btn btn-cancel">Cancel</button>
+            <button
+              onClick={handleSaveEdit}
+              disabled={saving}
+              className="bg-black text-white text-sm font-medium px-5 py-1.5 rounded-md hover:bg-gray-900 transition disabled:opacity-50"
+            >
+              {saving ? 'Saving...' : 'Save changes'}
+            </button>
           </div>
         </div>
       ) : (
         <>
-          <div className="header">
-            <h3 className="title">{article.title}</h3>
-            <p className="author-info">
-              By <Link href={`/user/${article.author_id}`} className="author-link">{article.profiles?.full_name || 'Unknown Author'}</Link>
-              {article.profiles?.username && <span className="username"> @{article.profiles.username}</span>}
+          {/* ARTICLE HEADER */}
+          <div>
+            <h3 className="text-sm font-medium text-black mb-1">{article.title}</h3>
+            <p className="text-xs text-gray-400">
+              By{' '}
+              <Link href={`/user/${article.author_id}`} className="text-black hover:underline">
+                {article.profiles?.full_name || 'Unknown Author'}
+              </Link>
+              {article.profiles?.username && (
+                <span className="text-gray-300"> @{article.profiles.username}</span>
+              )}
             </p>
           </div>
 
-          <p className="content">{article.content}</p>
+          {/* CONTENT */}
+          <p className="text-sm text-gray-600 leading-relaxed">{article.content}</p>
 
+          {/* ATTACHMENT */}
           {article.file_url && (
-            <div className="attachment">
+            <div className="border border-gray-100 rounded-md p-3 bg-gray-50">
               {article.file_type?.startsWith('image/') ? (
-                <img src={article.file_url} alt="attachment" className="image-attachment" />
+                <img src={article.file_url} alt="attachment" className="max-w-full rounded-md block" />
               ) : (
-                <a href={article.file_url} target="_blank" rel="noopener noreferrer" className="file-link">
+                <a href={article.file_url} target="_blank" rel="noopener noreferrer"
+                  className="text-xs text-gray-500 hover:text-black transition">
                   📄 {article.file_name}
                 </a>
               )}
             </div>
           )}
 
-          <div className="actions">
-            <button onClick={handleLike} className={`action-btn ${hasLiked ? 'liked' : ''}`}>
-              {hasLiked ? '🔥' : '👍'} {count}
+          {/* ACTIONS */}
+          <div className="flex items-center gap-2 pt-3 border-t border-gray-100 flex-wrap">
+            <button
+              onClick={handleLike}
+              className={`text-xs px-3 py-1.5 rounded-md border transition ${
+                hasLiked
+                  ? 'bg-gray-100 border-gray-200 text-black'
+                  : 'border-gray-100 text-gray-400 hover:bg-gray-50'
+              }`}
+            >
+              {hasLiked ? '♥' : '♡'} {count}
             </button>
-            <button onClick={handleToggleComments} className={`action-btn ${showComments ? 'active' : ''}`}>
-              💬 {comments.length > 0 ? comments.length : ''} {showComments ? 'Hide' : 'Comments'}
+            <button
+              onClick={handleToggleComments}
+              className={`text-xs px-3 py-1.5 rounded-md border transition ${
+                showComments
+                  ? 'bg-gray-100 border-gray-200 text-black'
+                  : 'border-gray-100 text-gray-400 hover:bg-gray-50'
+              }`}
+            >
+              💬 {showComments ? 'Hide' : 'Comments'}{comments.length > 0 ? ` ${comments.length}` : ''}
             </button>
-            <button onClick={handleShare} className="action-btn">🔗 Share</button>
-            {canEdit && <button onClick={() => setIsEditing(true)} className="btn-edit">✏️ Edit</button>}
-            {canDelete && <button onClick={handleDelete} className="btn-delete">🗑️ Delete</button>}
+            <button
+              onClick={handleShare}
+              className="text-xs px-3 py-1.5 rounded-md border border-gray-100 text-gray-400 hover:bg-gray-50 transition"
+            >
+              Share
+            </button>
+            {canEdit && (
+              <button
+                onClick={() => setIsEditing(true)}
+                className="text-xs px-3 py-1.5 rounded-md border border-gray-100 text-gray-400 hover:bg-gray-50 transition ml-auto"
+              >
+                Edit
+              </button>
+            )}
+            {canDelete && (
+              <button
+                onClick={handleDelete}
+                className="text-xs px-3 py-1.5 rounded-md border border-gray-100 text-red-400 hover:bg-red-50 transition"
+              >
+                Delete
+              </button>
+            )}
           </div>
 
+          {/* COMMENTS */}
           {showComments && (
-            <div className="comment-section">
-              <div className="comment-form">
-                <input value={newComment} onChange={(e) => setNewComment(e.target.value)} placeholder="Add a comment..." />
-                <button onClick={handleAddComment}>Post</button>
+            <div className="pt-3 border-t border-gray-100 flex flex-col gap-3">
+
+              {/* Comment input */}
+              <div className="flex gap-2">
+                <input
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
+                  placeholder="Add a comment..."
+                  className="flex-1 px-3 py-2 rounded-md border border-gray-200 bg-white text-sm text-black outline-none focus:border-gray-400 transition"
+                />
+                <button
+                  onClick={handleAddComment}
+                  className="bg-black text-white text-sm px-4 py-2 rounded-md hover:bg-gray-900 transition"
+                >
+                  Post
+                </button>
               </div>
 
               {topComments.length === 0 ? (
-                <p className="empty-text">No comments yet. Start the conversation!</p>
+                <p className="text-xs text-gray-300 text-center py-3">No comments yet.</p>
               ) : (
                 topComments.map(comment => (
-                  <div key={comment.id} className="comment-wrapper">
-                    <div className="comment-box">
-                      <p className="comment-user">
-                        <strong>{comment.profiles?.full_name || 'User'}</strong>
-                        {comment.profiles?.username && <span> @{comment.profiles.username}</span>}
+                  <div key={comment.id}>
+                    {/* Comment */}
+                    <div className="bg-gray-50 rounded-md p-3 flex flex-col gap-1">
+                      <p className="text-xs font-medium text-black">
+                        {comment.profiles?.full_name || 'User'}
+                        {comment.profiles?.username && (
+                          <span className="text-gray-300 font-normal"> @{comment.profiles.username}</span>
+                        )}
                       </p>
-                      <p className="comment-text">{comment.content}</p>
-                      <div className="comment-actions">
-                        <button onClick={() => setReplyingTo(replyingTo === comment.id ? null : comment.id)}>Reply</button>
+                      <p className="text-sm text-gray-600">{comment.content}</p>
+                      <div className="flex gap-3 mt-1">
+                        <button
+                          onClick={() => setReplyingTo(replyingTo === comment.id ? null : comment.id)}
+                          className="text-xs text-gray-400 hover:text-black transition"
+                        >
+                          Reply
+                        </button>
                         {(currentUserId === comment.user_id || isAdmin) && (
-                          <button className="del-btn" onClick={() => handleDeleteComment(comment.id)}>Delete</button>
+                          <button
+                            onClick={() => handleDeleteComment(comment.id)}
+                            className="text-xs text-red-400 hover:text-red-600 transition"
+                          >
+                            Delete
+                          </button>
                         )}
                       </div>
                     </div>
 
+                    {/* Reply input */}
                     {replyingTo === comment.id && (
-                      <div className="reply-form">
-                        <input value={replyText} onChange={(e) => setReplyText(e.target.value)} placeholder="Reply..." />
-                        <button className="btn-post-reply" onClick={() => handleAddReply(comment.id)}>Send</button>
+                      <div className="flex gap-2 mt-2 ml-4">
+                        <input
+                          value={replyText}
+                          onChange={(e) => setReplyText(e.target.value)}
+                          placeholder="Reply..."
+                          className="flex-1 px-3 py-1.5 rounded-md border border-gray-200 bg-white text-xs text-black outline-none focus:border-gray-400 transition"
+                        />
+                        <button
+                          onClick={() => handleAddReply(comment.id)}
+                          className="bg-black text-white text-xs px-3 py-1.5 rounded-md hover:bg-gray-900 transition"
+                        >
+                          Send
+                        </button>
                       </div>
                     )}
 
+                    {/* Replies */}
                     {getReplies(comment.id).map(reply => (
-                      <div key={reply.id} className="reply-box">
-                        <p className="comment-user"><strong>{reply.profiles?.full_name || 'User'}</strong></p>
-                        <p className="comment-text">{reply.content}</p>
+                      <div key={reply.id} className="ml-4 mt-2 bg-gray-50 border-l-2 border-gray-100 rounded-r-md p-3 flex flex-col gap-1">
+                        <p className="text-xs font-medium text-black">{reply.profiles?.full_name || 'User'}</p>
+                        <p className="text-sm text-gray-600">{reply.content}</p>
                         {(currentUserId === reply.user_id || isAdmin) && (
-                          <button className="del-btn" onClick={() => handleDeleteComment(reply.id)}>Delete</button>
+                          <button
+                            onClick={() => handleDeleteComment(reply.id)}
+                            className="text-xs text-red-400 hover:text-red-600 transition w-fit"
+                          >
+                            Delete
+                          </button>
                         )}
                       </div>
                     ))}
@@ -229,51 +321,6 @@ export default function ArticleCard({ article, currentUserId, currentUserRole, o
           )}
         </>
       )}
-
-      <style jsx>{`
-        .card { border: 1px solid #e5e7eb; padding: 20px; border-radius: 12px; background: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 20px; font-family: inherit; }
-        .title { font-size: 1.25rem; font-weight: 700; color: #111827; margin-bottom: 4px; }
-        .author-info { font-size: 0.85rem; color: #6b7280; margin-bottom: 12px; }
-        .author-link { color: #3b82f6; text-decoration: none; font-weight: 600; }
-        .username { color: #9ca3af; font-size: 0.75rem; }
-        .content { color: #374151; line-height: 1.6; margin-bottom: 15px; }
-        .attachment { margin: 15px 0; background: #f9fafb; border: 1px solid #f3f4f6; border-radius: 8px; padding: 8px; }
-        .image-attachment { max-width: 100%; border-radius: 6px; display: block; }
-        .file-link { display: inline-block; padding: 8px; color: #6366f1; font-weight: 500; text-decoration: none; }
-        
-        .actions { display: flex; gap: 8px; flex-wrap: wrap; border-top: 1px solid #f3f4f6; padding-top: 15px; }
-        .action-btn { padding: 6px 12px; border-radius: 20px; border: 1px solid #e5e7eb; background: #fff; cursor: pointer; transition: all 0.2s; font-size: 14px; }
-        .action-btn:hover { background: #f9fafb; }
-        .action-btn.liked { background: #fff7ed; border-color: #fdba74; color: #ea580c; }
-        .action-btn.active { background: #eef2ff; border-color: #c7d2fe; color: #4f46e5; }
-        
-        .btn-edit { margin-left: auto; background: #dbeafe; color: #1e40af; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
-        .btn-delete { background: #fee2e2; color: #991b1b; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
-
-        .comment-section { margin-top: 20px; padding-top: 15px; border-top: 1px dashed #e5e7eb; }
-        .comment-form { display: flex; gap: 8px; margin-bottom: 20px; }
-        .comment-form input { flex: 1; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 8px; outline: none; }
-        .comment-form button { background: #6366f1; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; }
-
-        .comment-box { background: #f3f4f6; padding: 12px; border-radius: 8px; margin-bottom: 8px; }
-        .comment-user { font-size: 13px; margin-bottom: 4px; }
-        .comment-text { font-size: 14px; color: #1f2937; }
-        .comment-actions { display: flex; gap: 12px; margin-top: 8px; }
-        .comment-actions button, .del-btn { background: none; border: none; font-size: 12px; color: #6366f1; cursor: pointer; padding: 0; }
-        .del-btn { color: #ef4444; }
-
-        .reply-box { margin-left: 24px; margin-top: 6px; background: #f9fafb; border-left: 2px solid #e5e7eb; padding: 8px 12px; border-radius: 0 8px 8px 0; }
-        .reply-form { margin-left: 24px; margin-bottom: 10px; display: flex; gap: 4px; }
-        .reply-form input { flex: 1; font-size: 13px; padding: 4px 8px; border: 1px solid #ddd; border-radius: 4px; }
-        .btn-post-reply { font-size: 12px; background: #6366f1; color: white; border: none; padding: 4px 8px; border-radius: 4px; }
-
-        /* Edit Mode Styles */
-        .edit-input { width: 100%; font-size: 1.25rem; font-weight: 700; padding: 8px; margin-bottom: 10px; border: 1px solid #a855f7; border-radius: 6px; }
-        .edit-textarea { width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; margin-bottom: 12px; }
-        .btn-save { background: #10b981; color: white; margin-right: 8px; padding: 5px 16px; }
-        .btn-cancel { background: #6b7280; color: white; padding: 5px 16px; }
-        .btn { padding: 5px 16px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; }
-      `}</style>
     </div>
   );
 }
