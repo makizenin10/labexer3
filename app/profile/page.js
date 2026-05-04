@@ -10,8 +10,6 @@ export default function ProfilePage() {
   const [articles, setArticles] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [fullName, setFullName] = useState("");
-  const [age, setAge] = useState("");
-  const [contactNumber, setContactNumber] = useState("");
   const [username, setUsername] = useState("");
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
@@ -32,15 +30,11 @@ export default function ProfilePage() {
       if (profileData) {
         setProfile(profileData);
         setFullName(profileData.full_name || "");
-        setAge(profileData.age || "");
-        setContactNumber(profileData.contact_number || "");
         setUsername(profileData.username || "");
       } else {
         setProfile({
           email: user.email,
           full_name: "",
-          age: "",
-          contact_number: "",
           username: ""
         });
       }
@@ -62,15 +56,13 @@ export default function ProfilePage() {
       .from("profiles")
       .update({
         full_name: fullName,
-        age: parseInt(age),
-        contact_number: contactNumber,
         username: username,
         email: profile.email,
       })
       .eq("id", user.id);
     setSaving(false);
     if (!error) {
-      setProfile({ ...profile, full_name: fullName, age, contact_number: contactNumber, username });
+      setProfile({ ...profile, full_name: fullName, username });
       setIsEditing(false);
       setMessage("Profile updated successfully!");
       setTimeout(() => setMessage(""), 3000);
@@ -111,14 +103,6 @@ export default function ProfilePage() {
                   className="styled-input readonly"
                 />
               </div>
-              <div className="field">
-                <label>Age</label>
-                <input type="number" value={age} onChange={(e) => setAge(e.target.value)} className="styled-input" />
-              </div>
-              <div className="field">
-                <label>Contact Number</label>
-                <input value={contactNumber} onChange={(e) => setContactNumber(e.target.value)} className="styled-input" />
-              </div>
               <div className="button-group">
                 <button className="save-btn" onClick={handleSave} disabled={saving}>
                   {saving ? 'Saving...' : '✅ Save Changes'}
@@ -131,8 +115,6 @@ export default function ProfilePage() {
               <div className="info-row"><span className="label">Username</span><span className="value">{profile.username || '—'}</span></div>
               <div className="info-row"><span className="label">Full Name</span><span className="value">{profile.full_name || '—'}</span></div>
               <div className="info-row"><span className="label">Email</span><span className="value">{profile.email}</span></div>
-              <div className="info-row"><span className="label">Age</span><span className="value">{profile.age || '—'}</span></div>
-              <div className="info-row"><span className="label">Contact</span><span className="value">{profile.contact_number || '—'}</span></div>
               <button className="edit-btn" onClick={() => setIsEditing(true)}>✏️ Edit Profile</button>
             </div>
           )}

@@ -58,14 +58,6 @@ export default function UserProfile() {
               <span className="label">Email</span>
               <span className="value">{profile.email}</span>
             </div>
-            <div className="info-row">
-              <span className="label">Age</span>
-              <span className="value">{profile.age || '—'}</span>
-            </div>
-            <div className="info-row">
-              <span className="label">Contact</span>
-              <span className="value">{profile.contact_number || '—'}</span>
-            </div>
           </div>
         </div>
 
@@ -95,10 +87,8 @@ export default function UserProfile() {
             padding: 40px 20px;
           }
           .container { max-width: 800px; margin: 0 auto; font-family: 'Inter', system-ui, sans-serif; }
-          
           .header { margin-bottom: 25px; }
 
-          /* BACK BUTTON BOX STYLE */
           :global(.back-link) { 
             display: inline-block !important;
             font-size: 14px !important; 
@@ -135,8 +125,6 @@ export default function UserProfile() {
 
           .info-row { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #f1f5f9; }
           .label { color: #64748b; font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
-          
-          /* SHARP BLACK VALUES */
           .value { color: #000000; font-weight: 700; font-size: 15px; }
 
           .section-title { font-size: 22px; font-weight: 800; color: #111827; margin-bottom: 20px; }
@@ -150,7 +138,6 @@ export default function UserProfile() {
             transition: 0.2s;
           }
           .article-item:hover { transform: translateY(-2px); border-color: #6366f1; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-          
           .article-item h3 { font-size: 18px; margin: 0 0 10px 0; color: #111827; font-weight: 800; }
           .article-preview { color: #475569; font-size: 14px; line-height: 1.6; margin-bottom: 12px; }
           .article-date { font-size: 12px; color: #94a3b8; font-weight: 600; }
