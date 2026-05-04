@@ -59,39 +59,32 @@ export default function ProfilePage() {
   };
 
   if (!user || !profile) return (
-    <div className="min-h-screen flex items-center justify-center text-sm text-gray-400">
-      Loading...
-    </div>
+    <div className="min-h-screen flex items-center justify-center text-sm text-gray-400">Loading...</div>
   );
 
   return (
-    <div className="max-w-2xl mx-auto px-5 py-10 font-sans">
+    <div className="w-[90%] mx-auto px-8 py-10 font-sans">
 
       {/* NAVBAR */}
-      <div className="flex justify-between items-center pb-5 border-b border-gray-100 mb-8">
+      <div className="flex justify-between items-center pb-5 border-b border-white/20 mb-8">
         <div className="flex items-center gap-2">
-          <div className="w-2 h-2 bg-black rounded-full"></div>
-          <span className="text-xs tracking-widest text-gray-400 uppercase">Article Dome</span>
+          <div className="w-2 h-2 bg-white rounded-full"></div>
+          <span className="text-lg font-semibold tracking-widest text-white uppercase">Article Dome</span>
         </div>
-        <Link
-          href="/dashboard"
-          className="text-sm text-black border border-gray-200 rounded-md px-3 py-1 hover:bg-gray-50 transition"
-        >
+        <Link href="/dashboard" className="text-sm text-white border border-white/40 rounded-md px-3 py-1 hover:bg-white hover:text-black transition">
           ← Dashboard
         </Link>
       </div>
 
       {/* PAGE TITLE */}
-      <div className="mb-6">
-        <h2 className="text-lg font-medium text-black">My Profile</h2>
-      </div>
+      <h2 className="text-xl font-semibold text-white mb-6">My Profile</h2>
 
       {/* PROFILE CARD */}
-      <div className="bg-gray-50 border border-gray-100 rounded-xl p-5 mb-6">
+      <div className="bg-white border border-gray-200 rounded-xl p-6 mb-6">
         {isEditing ? (
           <div className="flex flex-col gap-3">
             <div className="flex flex-col gap-1">
-              <label className="text-xs text-gray-400 uppercase tracking-widest">Username</label>
+              <label className="text-xs text-gray-500 uppercase tracking-widest">Username</label>
               <input
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
@@ -99,7 +92,7 @@ export default function ProfilePage() {
               />
             </div>
             <div className="flex flex-col gap-1">
-              <label className="text-xs text-gray-400 uppercase tracking-widest">Full Name</label>
+              <label className="text-xs text-gray-500 uppercase tracking-widest">Full Name</label>
               <input
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
@@ -107,18 +100,18 @@ export default function ProfilePage() {
               />
             </div>
             <div className="flex flex-col gap-1">
-              <label className="text-xs text-gray-400 uppercase tracking-widest">Email (Locked)</label>
+              <label className="text-xs text-gray-500 uppercase tracking-widest">Email (Locked)</label>
               <input
                 value={profile.email}
                 readOnly
                 onClick={() => alert('To change your email, please contact the admin.\n\n📧 Email: manaayjerica@gmail.com\n📞 Contact: 09686336110')}
-                className="px-3 py-2 rounded-md border border-gray-200 bg-white text-sm text-gray-400 outline-none cursor-not-allowed"
+                className="px-3 py-2 rounded-md border border-gray-200 bg-gray-50 text-sm text-gray-400 outline-none cursor-not-allowed"
               />
             </div>
             <div className="flex gap-2 justify-end mt-1">
               <button
                 onClick={() => setIsEditing(false)}
-                className="text-sm text-gray-400 border border-gray-100 rounded-md px-3 py-1.5 hover:bg-gray-50 transition"
+                className="text-sm text-gray-600 border border-gray-200 rounded-md px-3 py-1.5 hover:bg-gray-50 transition"
               >
                 Cancel
               </button>
@@ -134,15 +127,15 @@ export default function ProfilePage() {
         ) : (
           <div>
             <div className="flex justify-between items-center py-3 border-b border-gray-100">
-              <span className="text-xs text-gray-400 uppercase tracking-widest">Username</span>
+              <span className="text-xs text-gray-500 uppercase tracking-widest">Username</span>
               <span className="text-sm text-black font-medium">{profile.username || "—"}</span>
             </div>
             <div className="flex justify-between items-center py-3 border-b border-gray-100">
-              <span className="text-xs text-gray-400 uppercase tracking-widest">Full Name</span>
+              <span className="text-xs text-gray-500 uppercase tracking-widest">Full Name</span>
               <span className="text-sm text-black font-medium">{profile.full_name || "—"}</span>
             </div>
             <div className="flex justify-between items-center py-3">
-              <span className="text-xs text-gray-400 uppercase tracking-widest">Email</span>
+              <span className="text-xs text-gray-500 uppercase tracking-widest">Email</span>
               <span className="text-sm text-black font-medium">{profile.email}</span>
             </div>
             <div className="flex justify-end mt-4">
@@ -156,33 +149,30 @@ export default function ProfilePage() {
           </div>
         )}
         {message && (
-          <p className="text-xs text-gray-500 text-center mt-4">{message}</p>
+          <p className="text-xs text-green-500 text-center mt-4">{message}</p>
         )}
       </div>
 
       {/* MY ARTICLES */}
-      <div className="flex justify-between items-center mb-5">
-        <h2 className="text-lg font-medium text-black">My articles ({articles.length})</h2>
-      </div>
+      <h2 className="text-lg font-semibold text-white mb-4">My articles ({articles.length})</h2>
 
       <div className="flex flex-col gap-3">
         {articles.length === 0 ? (
-          <p className="text-sm text-gray-300 text-center py-10">No articles yet.</p>
+          <p className="text-sm text-white/50 text-center py-10">No articles yet.</p>
         ) : (
           articles.map((article) => (
-            <div key={article.id} className="bg-gray-50 border border-gray-100 rounded-xl p-4 flex flex-col gap-1">
-              <span className="text-sm font-medium text-black">{article.title}</span>
-              <p className="text-xs text-gray-400 leading-relaxed">
+            <div key={article.id} className="bg-white border border-gray-200 rounded-xl p-5 flex flex-col gap-1">
+              <span className="text-sm font-semibold text-black">{article.title}</span>
+              <p className="text-sm text-gray-600 leading-relaxed">
                 {article.content.substring(0, 100)}...
               </p>
-              <span className="text-xs text-gray-300 mt-1">
+              <span className="text-xs text-gray-400 mt-1">
                 {new Date(article.created_at).toLocaleDateString()}
               </span>
             </div>
           ))
         )}
       </div>
-
     </div>
   );
 }
