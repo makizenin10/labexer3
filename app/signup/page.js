@@ -7,13 +7,11 @@ export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
-  const [age, setAge] = useState("");
-  const [contactNumber, setContactNumber] = useState("");
   const [message, setMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSignUp = async () => {
-    if (!email.trim() || !password.trim() || !fullName.trim() || !age.trim() || !contactNumber.trim()) {
+    if (!email.trim() || !password.trim() || !fullName.trim()) {
       setMessage("Please fill in all fields before signing up.");
       return;
     }
@@ -24,21 +22,9 @@ export default function Signup() {
       return;
     }
 
-    const ageValue = parseInt(age, 10);
-    if (Number.isNaN(ageValue) || ageValue <= 0) {
-      setMessage("Please enter a valid age.");
-      return;
-    }
-
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\[\]{};':"\\|,.<>\/?]).{8,}$/;
     if (!passwordRegex.test(password)) {
       setMessage("Password must be at least 8 characters and include uppercase, lowercase, number, and symbol.");
-      return;
-    }
-
-    const phoneRegex = /^\d{11}$/;
-    if (!phoneRegex.test(contactNumber)) {
-      setMessage("Contact number must be exactly 11 digits.");
       return;
     }
 
@@ -54,8 +40,6 @@ export default function Signup() {
             id: data.user.id,
             email,
             full_name: fullName,
-            age: parseInt(age),
-            contact_number: contactNumber,
             role: 'user'
           }]);
 
@@ -89,7 +73,6 @@ export default function Signup() {
 
         <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} style={inputStyle} required />
 
-        {/* Password with show/hide */}
         <div style={{ position: 'relative', margin: '8px 0' }}>
           <input
             type={showPassword ? 'text' : 'password'}
@@ -107,8 +90,6 @@ export default function Signup() {
         </div>
 
         <input type="text" placeholder="Full Name" value={fullName} onChange={(e) => setFullName(e.target.value)} style={inputStyle} required />
-        <input type="number" placeholder="Age" value={age} onChange={(e) => setAge(e.target.value)} style={inputStyle} required />
-        <input type="tel" placeholder="Contact Number" value={contactNumber} onChange={(e) => setContactNumber(e.target.value.replace(/\D/g, ""))} maxLength={11} style={inputStyle} required />
 
         <button onClick={handleSignUp}
           style={{ width: '100%', padding: '8px', marginTop: '8px', border: 'none', background: '#a855f7', color: 'white', borderRadius: '4px', cursor: 'pointer' }}>
