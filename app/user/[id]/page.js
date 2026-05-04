@@ -40,7 +40,7 @@ export default function UserProfile() {
   );
 
   return (
-    <div className="max-w-5xl mx-auto px-5 py-10 font-sans">
+    <div className="max-w-5xl mx-auto px-15 py-10 font-sans">
 
       {/* NAVBAR */}
       <div className="flex justify-between items-center pb-5 border-b border-gray-100 mb-8">
