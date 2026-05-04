@@ -8,7 +8,7 @@ export default function Home() {
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-3">
             <div className="w-2 h-2 bg-black rounded-full"></div>
-            <span className="text-xs tracking-widest text-gray-400 uppercase">Article Space</span>
+            <span className="text-xs tracking-widest text-gray-400 uppercase">Article Dome</span>
           </div>
           <h1 className="text-3xl font-medium text-black leading-tight mb-2">
             Your space.<br />Your articles.

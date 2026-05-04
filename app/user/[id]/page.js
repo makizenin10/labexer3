@@ -46,7 +46,7 @@ export default function UserProfile() {
       <div className="flex justify-between items-center pb-5 border-b border-gray-100 mb-8">
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 bg-black rounded-full"></div>
-          <span className="text-xs tracking-widest text-gray-400 uppercase">Article Space</span>
+          <span className="text-xs tracking-widest text-gray-400 uppercase">Article Dome</span>
         </div>
         <Link
           href="/dashboard"

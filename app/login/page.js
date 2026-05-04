@@ -40,7 +40,7 @@ export default function Login() {
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-3">
             <div className="w-2 h-2 bg-black rounded-full"></div>
-            <span className="text-xs tracking-widest text-gray-400 uppercase">Article Space</span>
+            <span className="text-xs tracking-widest text-gray-400 uppercase">Article Dome</span>
           </div>
           <h1 className="text-2xl font-medium text-black mb-1">Welcome back</h1>
           <p className="text-sm text-gray-400">Sign in to your account to continue.</p>

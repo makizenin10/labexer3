@@ -2,10 +2,13 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../../lib/supabaseClient";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function ResetPassword() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const [message, setMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
   const router = useRouter();
@@ -13,18 +16,14 @@ export default function ResetPassword() {
   useEffect(() => {
     const checkResetLink = async () => {
       if (typeof window === "undefined") return;
-      
-      // Parse tokens from URL (Supabase sends these after clicking the email link)
       const params = new URLSearchParams(window.location.search);
       const access_token = params.get("access_token");
       const refresh_token = params.get("refresh_token");
       const type = params.get("type");
-
       if (type === "recovery" && access_token && refresh_token) {
         const { data, error } = await supabase.auth.setSession({ access_token, refresh_token });
         if (error || !data?.session) {
           setMessage("Invalid or expired reset link. Please request a new one.");
-          return;
         }
       }
     };
@@ -32,178 +31,98 @@ export default function ResetPassword() {
   }, []);
 
   const handleResetPassword = async () => {
-    setMessage(""); // Clear previous messages
+    setMessage("");
     setIsSuccess(false);
-
-    // 1. Check if passwords match
-    if (password !== confirmPassword) {
-      setMessage("Passwords do not match.");
-      return;
-    }
-
-    // 2. Strong Password Validation
-    // Requirements: 8+ chars, Uppercase, Lowercase, Number, Special Char
+    if (password !== confirmPassword) { setMessage("Passwords do not match."); return; }
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\[\]{};':"\\|,.<>\/?]).{8,}$/;
     if (!passwordRegex.test(password)) {
       setMessage("Password must be 8+ characters with uppercase, lowercase, number, and symbol.");
       return;
     }
-
-    // 3. Update Password in Supabase
     const { error } = await supabase.auth.updateUser({ password });
-
     if (error) {
       setMessage(error.message);
     } else {
       setIsSuccess(true);
       setMessage("Password updated successfully! Redirecting...");
-      setTimeout(() => {
-        router.push("/login");
-      }, 2500);
+      setTimeout(() => router.push("/login"), 2500);
     }
   };
 
   return (
-    <div className="main-wrapper">
-      <div className="container">
-        <h1>Reset Password</h1>
+    <div className="min-h-screen flex items-center justify-center px-4">
+      <div className="bg-white border border-gray-100 rounded-xl p-10 w-full max-w-sm">
 
-        <div className="input-group">
-          <input
-            type="password"
-            placeholder="New Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-
-          <input
-            type="password"
-            placeholder="Confirm New Password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
+        {/* HEADER */}
+        <div className="mb-8">
+          <div className="flex items-center gap-2 mb-3">
+            <div className="w-2 h-2 bg-black rounded-full"></div>
+            <span className="text-xs tracking-widest text-gray-400 uppercase">Article Dome</span>
+          </div>
+          <h1 className="text-2xl font-medium text-black mb-1">Reset password</h1>
+          <p className="text-sm text-gray-400">Choose a strong new password for your account.</p>
         </div>
 
-        <button onClick={handleResetPassword}>Update Password</button>
+        <hr className="border-gray-100 mb-6" />
 
+        {/* INPUTS */}
+        <div className="flex flex-col gap-3 mb-4">
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="New password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-3 py-2 pr-14 rounded-md border border-gray-200 text-sm text-black outline-none focus:border-gray-400 transition"
+            />
+            <button
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 hover:text-gray-600 transition"
+            >
+              {showPassword ? "hide" : "show"}
+            </button>
+          </div>
+          <div className="relative">
+            <input
+              type={showConfirm ? "text" : "password"}
+              placeholder="Confirm new password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className="w-full px-3 py-2 pr-14 rounded-md border border-gray-200 text-sm text-black outline-none focus:border-gray-400 transition"
+            />
+            <button
+              onClick={() => setShowConfirm(!showConfirm)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 hover:text-gray-600 transition"
+            >
+              {showConfirm ? "hide" : "show"}
+            </button>
+          </div>
+        </div>
+
+        {/* MESSAGE */}
         {message && (
-          <p className={`message ${isSuccess ? "success" : "error"}`}>
+          <p className={`text-xs mb-3 ${isSuccess ? "text-gray-500" : "text-red-400"}`}>
             {message}
           </p>
         )}
 
-        <div className="footer-links">
-          <a href="/login">← Back to Login</a>
+        {/* BUTTON */}
+        <button
+          onClick={handleResetPassword}
+          className="w-full bg-black text-white rounded-md py-2.5 px-4 text-sm font-medium flex items-center justify-between hover:bg-gray-900 transition"
+        >
+          <span>Update password</span>
+          <span>→</span>
+        </button>
+
+        {/* FOOTER */}
+        <div className="mt-6 pt-5 border-t border-gray-100 text-center">
+          <Link href="/login" className="text-xs text-gray-300 hover:text-gray-500 transition">
+            ← Back to login
+          </Link>
         </div>
+
       </div>
-
-      <style jsx>{`
-        .main-wrapper {
-          min-height: 100vh;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background-image: url('/circuit-bg.png'); 
-          background-size: cover;
-          background-position: center;
-          padding: 20px;
-        }
-
-        .container {
-          background: rgba(255, 255, 255, 0.98);
-          padding: 40px;
-          border-radius: 12px;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-          width: 100%;
-          max-width: 400px;
-          text-align: center;
-          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        h1 {
-          font-size: 26px;
-          font-weight: 700;
-          margin-bottom: 8px;
-          color: #111;
-        }
-
-        .subtitle {
-          font-size: 14px;
-          color: #666;
-          margin-bottom: 24px;
-        }
-
-        .input-group {
-          margin-bottom: 20px;
-        }
-
-        input {
-          width: 100%;
-          padding: 12px 15px;
-          margin: 8px 0;
-          border: 1px solid #ddd;
-          border-radius: 8px;
-          background: #fcfcfc;
-          font-size: 15px;
-          outline: none;
-          transition: border-color 0.2s;
-        }
-
-        input:focus {
-          border-color: #a855f7;
-        }
-
-        button {
-          width: 100%;
-          padding: 13px;
-          background: #a855f7;
-          color: white;
-          font-weight: 600;
-          font-size: 16px;
-          border: none;
-          border-radius: 8px;
-          cursor: pointer;
-          transition: background 0.3s ease;
-        }
-
-        button:hover {
-          background: #9333ea;
-        }
-
-        .message {
-          margin-top: 18px;
-          font-size: 14px;
-          padding: 10px;
-          border-radius: 6px;
-        }
-
-        .message.error {
-          color: #dc2626;
-          background: #fee2e2;
-        }
-
-        .message.success {
-          color: #16a34a;
-          background: #dcfce7;
-        }
-
-        .footer-links {
-          margin-top: 25px;
-          border-top: 1px solid #eee;
-          padding-top: 15px;
-        }
-
-        .footer-links a {
-          font-size: 14px;
-          color: #777;
-          text-decoration: none;
-        }
-
-        .footer-links a:hover {
-          color: #a855f7;
-          text-decoration: underline;
-        }
-      `}</style>
     </div>
   );
 }
