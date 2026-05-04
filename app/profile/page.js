@@ -10,7 +10,6 @@ export default function ProfilePage() {
   const [articles, setArticles] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [fullName, setFullName] = useState("");
-  const [username, setUsername] = useState("");
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
   const router = useRouter();
@@ -27,9 +26,8 @@ export default function ProfilePage() {
       if (profileData) {
         setProfile(profileData);
         setFullName(profileData.full_name || "");
-        setUsername(profileData.username || "");
       } else {
-        setProfile({ email: user.email, full_name: "", username: "" });
+        setProfile({ email: user.email, full_name: "" });
       }
 
       const { data: articleData } = await supabase
@@ -45,11 +43,11 @@ export default function ProfilePage() {
     setSaving(true);
     const { error } = await supabase
       .from("profiles")
-      .update({ full_name: fullName, username, email: profile.email })
+      .update({ full_name: fullName, email: profile.email })
       .eq("id", user.id);
     setSaving(false);
     if (!error) {
-      setProfile({ ...profile, full_name: fullName, username });
+      setProfile({ ...profile, full_name: fullName });
       setIsEditing(false);
       setMessage("Profile updated successfully!");
       setTimeout(() => setMessage(""), 3000);
@@ -118,10 +116,6 @@ export default function ProfilePage() {
           </div>
         ) : (
           <div>
-            <div className="flex justify-between items-center py-3 border-b border-gray-100">
-              <span className="text-xs text-gray-500 uppercase tracking-widest">Username</span>
-              <span className="text-sm text-black font-medium">{profile.username || "—"}</span>
-            </div>
             <div className="flex justify-between items-center py-3 border-b border-gray-100">
               <span className="text-xs text-gray-500 uppercase tracking-widest">Full Name</span>
               <span className="text-sm text-black font-medium">{profile.full_name || "—"}</span>
