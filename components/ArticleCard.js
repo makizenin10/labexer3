@@ -33,7 +33,7 @@ export default function ArticleCard({ article, currentUserId, currentUserRole, o
 
   const fetchComments = async () => {
     const { data, error } = await supabase.from('comments')
-      .select('*, profiles(username, full_name)')
+      .select('*, profiles(full_name)')
       .eq('article_id', article.id).order('created_at', { ascending: true });
     if (!error) setComments(data);
   };
@@ -160,9 +160,6 @@ export default function ArticleCard({ article, currentUserId, currentUserRole, o
               <Link href={`/user/${article.author_id}`} className="text-black hover:underline">
                 {article.profiles?.full_name || 'Unknown Author'}
               </Link>
-              {article.profiles?.username && (
-                <span className="text-gray-300"> @{article.profiles.username}</span>
-              )}
             </p>
           </div>
 
@@ -254,13 +251,9 @@ export default function ArticleCard({ article, currentUserId, currentUserRole, o
               ) : (
                 topComments.map(comment => (
                   <div key={comment.id}>
-                    {/* Comment */}
                     <div className="bg-gray-50 rounded-md p-3 flex flex-col gap-1">
                       <p className="text-xs font-medium text-black">
                         {comment.profiles?.full_name || 'User'}
-                        {comment.profiles?.username && (
-                          <span className="text-gray-300 font-normal"> @{comment.profiles.username}</span>
-                        )}
                       </p>
                       <p className="text-sm text-gray-600">{comment.content}</p>
                       <div className="flex gap-3 mt-1">
