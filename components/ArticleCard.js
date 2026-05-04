@@ -155,7 +155,7 @@ export default function ArticleCard({ article, currentUserId, currentUserRole, o
           {/* ARTICLE HEADER */}
           <div>
             <h3 className="text-sm font-medium text-black mb-1">{article.title}</h3>
-            <p className="text-xs text-gray-400">
+            <p className="text-xs text-black">
               By{' '}
               <Link href={`/user/${article.author_id}`} className="text-black hover:underline">
                 {article.profiles?.full_name || 'Unknown Author'}
@@ -167,11 +167,11 @@ export default function ArticleCard({ article, currentUserId, currentUserRole, o
           </div>
 
           {/* CONTENT */}
-          <p className="text-sm text-gray-600 leading-relaxed">{article.content}</p>
+          <p className="text-sm text-black leading-relaxed">{article.content}</p>
 
           {/* ATTACHMENT */}
           {article.file_url && (
-            <div className="border border-gray-100 rounded-md p-3 bg-gray-50">
+            <div className="border border-gray-100 rounded-md p-3 bg-black-50">
               {article.file_type?.startsWith('image/') ? (
                 <img src={article.file_url} alt="attachment" className="max-w-full rounded-md block" />
               ) : (
