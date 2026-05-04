@@ -12,8 +12,8 @@ const styles = {
   brandText: "text-lg font-semibold tracking-widest text-white uppercase",
   adminBadge: "text-xs bg-black text-white px-2 py-0.5 rounded-full tracking-wide",
   userEmail: "text-sm text-yellow-400",
-  profileBtn: "text-sm text-white border border-gray-200 rounded-md px-4 py-1 hover:bg-gray-50 transition whitespace-nowrap min-w-fit",
-  logoutBtn: "text-sm text-white border border-gray-100 rounded-md px-3 py-1 hover:bg-gray-50 transition",
+  profileBtn: "text-sm text-white border border-gray-200 rounded-md px-4 py-1 hover:bg-black transition whitespace-nowrap min-w-fit",
+  logoutBtn: "text-sm text-white border border-gray-100 rounded-md px-3 py-1 hover:bg-black transition",
 
   // Action bar
   sectionTitle: "text-xl font-medium text-black",
@@ -112,7 +112,7 @@ export default function Dashboard() {
 
       {/* ACTION BAR */}
       <div className="flex justify-between items-center mb-5">
-        <h2 className={styles.sectionTitle}>Latest articles</h2>
+        <h2 className={styles.sectionTitle}>Latest Articles</h2>
         <button onClick={() => setShowForm(!showForm)} className={styles.publishBtn}>
           {showForm ? "✕ Cancel" : <><span className="text-base">+</span> Publish article</>}
         </button>
