@@ -157,7 +157,7 @@ export default function ArticleCard({ article, currentUserId, currentUserRole, o
             <h3 className="text-sm font-medium text-black mb-1">{article.title}</h3>
             <p className="text-xs text-black">
               By{' '}
-              <Link href={`/user/${article.author_id}`} className="text-black text-lg hover:underline">
+              <Link href={`/user/${article.author_id}`} className="text-blue text-lg hover:underline">
                 {article.profiles?.full_name || 'Unknown Author'}
               </Link>
             </p>
