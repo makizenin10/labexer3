@@ -63,7 +63,7 @@ export default function ProfilePage() {
   );
 
   return (
-    <div className="w-[90%] mx-auto px-8 py-10 font-sans">
+    <div className="w-[60%] mx-auto px-8 py-10 font-sans">
 
       {/* NAVBAR */}
       <div className="flex justify-between items-center pb-5 border-b border-white/20 mb-8">
@@ -83,14 +83,6 @@ export default function ProfilePage() {
       <div className="bg-white border border-gray-200 rounded-xl p-6 mb-6">
         {isEditing ? (
           <div className="flex flex-col gap-3">
-            <div className="flex flex-col gap-1">
-              <label className="text-xs text-gray-500 uppercase tracking-widest">Username</label>
-              <input
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="px-3 py-2 rounded-md border border-gray-200 bg-white text-sm text-black outline-none focus:border-gray-400 transition"
-              />
-            </div>
             <div className="flex flex-col gap-1">
               <label className="text-xs text-gray-500 uppercase tracking-widest">Full Name</label>
               <input
