@@ -45,49 +45,47 @@ export default function UserProfile() {
       {/* NAVBAR */}
       <div className="flex justify-between items-center pb-5 border-b border-gray-100 mb-8">
         <div className="flex items-center gap-2">
-          <div className="w-2 h-2 bg-black rounded-full"></div>
-          <span className="text-xs tracking-widest text-gray-400 uppercase">Article Dome</span>
+          <div className="w-2 h-2 bg-white rounded-full"></div>
+          <span className="text-lg font-semibold tracking-widest text-white uppercase">Article Dome</span>
         </div>
         <Link
           href="/dashboard"
-          className="text-sm text-black border border-gray-200 rounded-md px-3 py-1 hover:bg-gray-50 transition"
+          className="text-sm text-white border border-gray-400 rounded-md px-3 py-1 hover:bg-white hover:text-black transition"
         >
           ← Dashboard
         </Link>
       </div>
 
       {/* PROFILE CARD */}
-      <div className="bg-gray-50 border border-gray-100 rounded-xl p-5 mb-6">
+      <div className="bg-white border border-gray-200 rounded-xl p-5 mb-6">
         <div className="pb-4 mb-4 border-b border-gray-100">
-          <h1 className="text-lg font-medium text-black">
+          <h1 className="text-lg font-semibold text-black">
             {profile.full_name || profile.username || "Unknown User"}
           </h1>
-          <p className="text-xs text-gray-400 mt-0.5">@{profile.username || "user"}</p>
+          <p className="text-xs text-gray-500 mt-0.5">@{profile.username || "user"}</p>
         </div>
         <div className="flex justify-between items-center">
-          <span className="text-xs text-gray-400 uppercase tracking-widest">Email</span>
+          <span className="text-xs text-gray-500 uppercase tracking-widest">Email</span>
           <span className="text-sm text-black font-medium">{profile.email}</span>
         </div>
       </div>
 
       {/* ARTICLES */}
-      <div className="flex justify-between items-center mb-5">
-        <h2 className="text-lg font-medium text-black">
-          Articles by {profile.full_name || profile.username} ({articles.length})
-        </h2>
-      </div>
+      <h2 className="text-lg font-medium text-white mb-4">
+        Articles by {profile.full_name || profile.username} ({articles.length})
+      </h2>
 
       <div className="flex flex-col gap-3">
         {articles.length === 0 ? (
           <p className="text-sm text-gray-300 text-center py-10">No articles published yet.</p>
         ) : (
           articles.map((article) => (
-            <div key={article.id} className="bg-gray-50 border border-gray-100 rounded-xl p-4 flex flex-col gap-1">
-              <span className="text-sm font-medium text-black">{article.title}</span>
-              <p className="text-xs text-gray-400 leading-relaxed">
+            <div key={article.id} className="bg-white border border-gray-200 rounded-xl p-4 flex flex-col gap-1">
+              <span className="text-sm font-semibold text-black">{article.title}</span>
+              <p className="text-sm text-gray-600 leading-relaxed">
                 {article.content.substring(0, 150)}...
               </p>
-              <span className="text-xs text-gray-300 mt-1">
+              <span className="text-xs text-gray-400 mt-1">
                 {new Date(article.created_at).toLocaleDateString()}
               </span>
             </div>
