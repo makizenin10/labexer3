@@ -29,7 +29,7 @@ const styles = {
   submitBtn: "bg-black text-white text-sm font-medium px-5 py-2 rounded-md hover:bg-gray-900 transition disabled:opacity-50",
 
   // Feed
-  emptyState: "text-sm text-gray-300 text-center py-10",
+  emptyState: "text-sm text-white text-center py-10",
 };
 // ================================
 
