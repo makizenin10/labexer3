@@ -11,7 +11,7 @@ const styles = {
   brandDot: "w-2 h-2 bg-white rounded-full",
   brandText: "text-lg font-semibold tracking-widest text-white uppercase",
   adminBadge: "text-xs bg-black text-white px-2 py-0.5 rounded-full tracking-wide",
-  userEmail: "text-sm text-gray-400",
+  userEmail: "text-sm text-yellow-400",
   profileBtn: "text-sm text-white border border-gray-200 rounded-md px-4 py-1 hover:bg-gray-50 transition whitespace-nowrap min-w-fit",
   logoutBtn: "text-sm text-white border border-gray-100 rounded-md px-3 py-1 hover:bg-gray-50 transition",
 
