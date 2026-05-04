@@ -137,7 +137,7 @@ export default function ArticleCard({ article, currentUserId, currentUserRole, o
           <div className="flex gap-2 justify-end">
             <button
               onClick={() => setIsEditing(false)}
-              className="text-sm text-gray-400 border border-gray-100 rounded-md px-3 py-1.5 hover:bg-gray-50 transition"
+              className="text-sm text-gray-600 border border-gray-100 rounded-md px-3 py-1.5 hover:bg-gray-50 transition"
             >
               Cancel
             </button>
@@ -187,7 +187,7 @@ export default function ArticleCard({ article, currentUserId, currentUserRole, o
               className={`text-xs px-3 py-1.5 rounded-md border transition ${
                 hasLiked
                   ? 'bg-gray-100 border-gray-200 text-black'
-                  : 'border-gray-100 text-gray-400 hover:bg-gray-50'
+                  : 'border-gray-100 text-gray-600 hover:bg-gray-50'
               }`}
             >
               {hasLiked ? '♥' : '♡'} {count}
@@ -197,21 +197,21 @@ export default function ArticleCard({ article, currentUserId, currentUserRole, o
               className={`text-xs px-3 py-1.5 rounded-md border transition ${
                 showComments
                   ? 'bg-gray-100 border-gray-200 text-black'
-                  : 'border-gray-100 text-gray-400 hover:bg-gray-50'
+                  : 'border-gray-100 text-gray-600 hover:bg-gray-50'
               }`}
             >
               💬 {showComments ? 'Hide' : 'Comments'}{comments.length > 0 ? ` ${comments.length}` : ''}
             </button>
             <button
               onClick={handleShare}
-              className="text-xs px-3 py-1.5 rounded-md border border-gray-100 text-gray-400 hover:bg-gray-50 transition"
+              className="text-xs px-3 py-1.5 rounded-md border border-gray-100 text-gray-600 hover:bg-gray-50 transition"
             >
               Share
             </button>
             {canEdit && (
               <button
                 onClick={() => setIsEditing(true)}
-                className="text-xs px-3 py-1.5 rounded-md border border-gray-100 text-gray-400 hover:bg-gray-50 transition ml-auto"
+                className="text-xs px-3 py-1.5 rounded-md border border-gray-100 text-gray-600 hover:bg-gray-50 transition ml-auto"
               >
                 Edit
               </button>
@@ -259,7 +259,7 @@ export default function ArticleCard({ article, currentUserId, currentUserRole, o
                       <div className="flex gap-3 mt-1">
                         <button
                           onClick={() => setReplyingTo(replyingTo === comment.id ? null : comment.id)}
-                          className="text-xs text-gray-400 hover:text-black transition"
+                          className="text-xs text-gray-600 hover:text-black transition"
                         >
                           Reply
                         </button>

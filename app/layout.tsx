@@ -12,7 +12,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
+export const metadata: Metadata = { 
   title: "Student Portal Demo",
   description: "A simple integrated web app using Supabase and Vercel.",
 };
