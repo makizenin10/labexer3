@@ -16,7 +16,7 @@ const styles = {
   logoutBtn: "text-sm text-white border border-gray-100 rounded-md px-3 py-1 hover:bg-gray-50 transition",
 
   // Action bar
-  sectionTitle: "text-lg font-medium text-black",
+  sectionTitle: "text-xl font-medium text-black",
   publishBtn: "flex items-center gap-1.5 bg-black text-white text-sm font-medium px-4 py-2 rounded-md hover:bg-gray-900 transition",
 
   // Publish form
