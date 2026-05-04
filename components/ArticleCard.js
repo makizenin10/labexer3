@@ -154,7 +154,7 @@ export default function ArticleCard({ article, currentUserId, currentUserRole, o
         <>
           {/* ARTICLE HEADER */}
           <div>
-            <h3 className="text-sm font-medium text-black mb-1">{article.title}</h3>
+            <h3 className="text-md font-medium text-black mb-1">{article.title}</h3>
             <p className="text-xs text-black">
               By{' '}
               <Link href={`/user/${article.author_id}`} className="text-blue-500 text-sm hover:underline">
