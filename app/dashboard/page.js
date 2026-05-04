@@ -31,7 +31,6 @@ const styles = {
   // Feed
   emptyState: "text-sm text-white text-center py-10",
 };
-// ================================
 
 export default function Dashboard() {
   const [user, setUser] = useState(null);
@@ -52,7 +51,7 @@ export default function Dashboard() {
       setUser(user);
       const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).single();
       setUserRole(profile?.role || "user");
-      const { data, error } = await supabase.from("articles").select(`*, profiles(username, full_name)`).order("created_at", { ascending: false });
+      const { data, error } = await supabase.from("articles").select(`*, profiles(full_name)`).order("created_at", { ascending: false });
       if (!error) setArticles(data);
     };
     getData();
@@ -83,7 +82,7 @@ export default function Dashboard() {
       file_name = selectedFile.name;
       file_type = selectedFile.type;
     }
-    const { data, error } = await supabase.from("articles").insert([{ title: newTitle, content: newContent, author_id: user.id, counter: 0, file_url, file_name, file_type }]).select(`*, profiles(username, full_name)`).single();
+    const { data, error } = await supabase.from("articles").insert([{ title: newTitle, content: newContent, author_id: user.id, counter: 0, file_url, file_name, file_type }]).select(`*, profiles(full_name)`).single();
     setPublishing(false);
     if (!error) { setArticles((prev) => [data, ...prev]); setNewTitle(""); setNewContent(""); setSelectedFile(null); setShowForm(false); }
     else alert("Failed to publish: " + error.message);
