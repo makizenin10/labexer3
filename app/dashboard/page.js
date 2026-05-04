@@ -69,8 +69,8 @@ export default function Dashboard() {
       {/* NAVBAR */}
       <div className="flex justify-between items-center pb-5 border-b border-gray-100 mb-8">
         <div className="flex items-center gap-2">
-          <div className="w-2 h-2 bg-black rounded-full"></div>
-          <span className="text-xs tracking-widest text-gray-400 uppercase">Article Dome</span>
+          <div className="w-2 h-2 bg-white rounded-full"></div>
+          <span className="text-lg font-semibold tracking-widest text-white uppercase">Article Dome</span>
           {userRole === "admin" && (
             <span className="text-xs bg-black text-white px-2 py-0.5 rounded-full tracking-wide">Admin</span>
           )}
