@@ -62,11 +62,11 @@ export default function UserProfile() {
           <h1 className="text-lg font-semibold text-black">
             {profile.full_name || profile.username || "Unknown User"}
           </h1>
-          <p className="text-xs text-gray-500 mt-0.5">@{profile.username || "user"}</p>
+          <p className="text-xs text-gray-500 mt-0.5">{profile.role || "user"}</p>
         </div>
         <div className="flex justify-between items-center">
-          <span className="text-xs text-gray-500 uppercase tracking-widest">Email</span>
-          <span className="text-sm text-black font-medium">{profile.email}</span>
+          <span className="text-xs text-black uppercase tracking-widest">Email   </span>
+          <span className="text-sm text-blue-500 font-medium">{profile.email}</span>
         </div>
       </div>
 
